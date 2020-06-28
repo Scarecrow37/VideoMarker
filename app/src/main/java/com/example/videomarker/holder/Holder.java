@@ -3,6 +3,7 @@ package com.example.videomarker.holder;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.media.Image;
 import android.provider.ContactsContract;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.videomarker.R;
+import com.example.videomarker.activity.PlayerActivity;
 
 import java.security.AccessController;
 
@@ -33,6 +35,18 @@ public class Holder extends RecyclerView.ViewHolder{
         textDur = (TextView) itemView.findViewById(R.id.textDur);
         //textId = (TextView) itemView.findViewById(R.id.textView3);
         btnMore = (ImageButton) itemView.findViewById(R.id.btnMore);
+//        itemView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                int pos = getAdapterPosition();
+//                if(pos != RecyclerView.NO_POSITION) {
+//                    Intent intent1 = new Intent(context, PlayerActivity.class);
+//                    intent1.putExtra("ID", id);
+//                    context.startActivity(intent1);
+//
+//                }
+//            }
+//        });
     }
   
 //    public String getId() {

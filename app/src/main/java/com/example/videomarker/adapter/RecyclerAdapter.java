@@ -1,5 +1,6 @@
 package com.example.videomarker.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,13 +21,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.videomarker.Listener.ClickListener;
 import com.example.videomarker.R;
 import com.example.videomarker.activity.InfoActivity;
+import com.example.videomarker.activity.PlayerActivity;
 import com.example.videomarker.data.entities.Data;
 import com.example.videomarker.data.util.ContentLoader;
 import com.example.videomarker.holder.Holder;
 
 import java.util.List;
 
-public class RecyclerAdapter extends RecyclerView.Adapter<Holder> implements ClickListener {
+public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements ClickListener {
 
     private List<Data> datas;
     public final Context context;
@@ -42,24 +44,47 @@ public class RecyclerAdapter extends RecyclerView.Adapter<Holder> implements Cli
 
     @NonNull
     @Override
-    public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item, parent, false);
         return new Holder(view);
     }
 
 
     @Override
-    public void onBindViewHolder(@NonNull final Holder holder, final int position) {
-        Data data = datas.get(position);
-        //holder.setId(String.valueOf(data.getResId()));
-        holder.setName(data.getName());
-        holder.setDur(data.getDur());
-        holder.btnMore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onItemClick(view, position);
-            }
-        });
+    public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder vholder, int position) {
+        if(vholder instanceof Holder) {
+            final Holder holder = (Holder) vholder;
+
+            Data data = datas.get(position);
+            //holder.setId(String.valueOf(data.getResId()));
+            holder.setName(data.getName());
+            holder.setDur(data.getDur());
+            holder.btnMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onBtnClick(view, position);
+                }
+            });
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(context, PlayerActivity.class);
+                    intent.putExtra("ID", id);
+                    context.startActivity(intent);
+                }
+            });
+        }
+
+//        Data data = datas.get(position);
+//        //holder.setId(String.valueOf(data.getResId()));
+//        holder.setName(data.getName());
+//        holder.setDur(data.getDur());
+//        holder.btnMore.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                onBtnClick(view, position);
+//            }
+//        });
 
     }
 
@@ -70,7 +95,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<Holder> implements Cli
 
 
     @Override
-    public void onItemClick(View v, int position) {
+    public void onBtnClick(View v, int position) {
         List<Data> datas = ContentLoader.getContent(context);
 
         id = String.valueOf(datas.get(position).getResId());
@@ -86,11 +111,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<Holder> implements Cli
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.pPlay:
+                        Intent intent1 = new Intent(context, PlayerActivity.class);
+                        intent1.putExtra("ID", id);
+                        context.startActivity(intent1);
                         break;
                     case R.id.pInfo:
-                        Intent intent = new Intent(context, InfoActivity.class);
-                        intent.putExtra("ID", id);
-                        context.startActivity(intent);
+                        Intent intent2 = new Intent(context, InfoActivity.class);
+                        intent2.putExtra("ID", id);
+                        context.startActivity(intent2);
                         break;
                     case R.id.pAddpl:
                         break;
@@ -122,4 +150,5 @@ public class RecyclerAdapter extends RecyclerView.Adapter<Holder> implements Cli
         });
         p.show();
     }
+//TODO: Onclicklistener ViewHolder로 옮겨지는지 확인할 것
 }

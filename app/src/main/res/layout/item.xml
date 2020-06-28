@@ -13,6 +13,7 @@
         android:orientation="horizontal">
 
         <FrameLayout
+            android:id="@+id/itemImage"
             android:layout_width="0dp"
             android:layout_weight="3.5"
             android:layout_height="match_parent">
@@ -36,9 +37,10 @@
         </FrameLayout>
 
         <LinearLayout
+            android:id="@+id/itemInfo"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="4.5"
+            android:layout_weight="4"
             android:orientation="vertical">
 
             <TextView
@@ -73,7 +75,7 @@
             android:layout_height="match_parent"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
-            android:layout_weight="0.5"
+            android:layout_weight="1"
             android:focusableInTouchMode="true"
             android:src="@drawable/ic_baseline_more_vert_24" />
     </LinearLayout>
