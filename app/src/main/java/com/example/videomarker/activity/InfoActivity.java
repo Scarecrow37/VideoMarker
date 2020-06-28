@@ -20,6 +20,7 @@ import android.provider.MediaStore;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.videomarker.R;
 import com.example.videomarker.adapter.RecyclerAdapter;
@@ -33,8 +34,6 @@ public class InfoActivity extends AppCompatActivity {
 
     private String id;
     private Uri contentUri;
-    private String name;
-    private String updateValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,9 +46,8 @@ public class InfoActivity extends AppCompatActivity {
 
         //Id를 Uri로 변환하는 코드
         contentUri = Uri.withAppendedPath(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, id.toString());
-        Toast.makeText(getApplicationContext(), name, Toast.LENGTH_SHORT).show();
 
-        final EditText et = new EditText(InfoActivity.this);
+        EditText et = new EditText(InfoActivity.this);
         Button reNameBtn = (Button) findViewById(R.id.reName);
         reNameBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,16 +56,11 @@ public class InfoActivity extends AppCompatActivity {
                 builder.setView(et);
                 builder.setTitle("파일 명 변경");
                 builder.setMessage("파일 명을 변경하시겠습니까?");
-                et.setHint(name);
-                //TODO:새로운 이름값이 전달안됨
-                //updateValue = et.getText().toString();
                 builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         ContentLoader cl = new ContentLoader();
-                        String result = cl.modifyContent(getApplicationContext(), et.getText().toString(), contentUri, id);
-                        Toast.makeText(getApplicationContext(),result, Toast.LENGTH_SHORT).show();
-                        cl.getContent(getApplicationContext());
+                        cl.modifyContent(getApplicationContext(),et.getText().toString(), contentUri);
                         dialogInterface.dismiss();
                     }
                 });
@@ -101,7 +94,7 @@ public class InfoActivity extends AppCompatActivity {
         Uri uri = contentUri;
         String projections[] = {
                 MediaStore.Video.Media._ID,
-                MediaStore.Video.Media.TITLE,
+                MediaStore.Video.Media.DISPLAY_NAME,
                 MediaStore.Video.Media.DURATION,
                 MediaStore.Video.Media.SIZE,
                 MediaStore.Video.Media.MIME_TYPE,
@@ -117,7 +110,7 @@ public class InfoActivity extends AppCompatActivity {
                 int id = c.getInt(index);
 
                 index = c.getColumnIndex(projections[1]);
-                name = c.getString(index);
+                String name = c.getString(index);
 
                 index = c.getColumnIndex(projections[2]);
                 String millisDur = c.getString(index);

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Parcel;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.widget.EditText;
 
@@ -37,7 +38,7 @@ public class ContentLoader {
         Uri uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
         String projections[] = {
                 MediaStore.Video.Media._ID,
-                MediaStore.Video.Media.TITLE,
+                MediaStore.Video.Media.DISPLAY_NAME,
                 MediaStore.Video.Media.DURATION,
                 MediaStore.Video.Media.SIZE,
                 MediaStore.Video.Media.MIME_TYPE,
@@ -130,19 +131,18 @@ public class ContentLoader {
 
         ContentResolver contentResolver = context.getContentResolver();
         contentResolver.delete(contentUri, mSelection, mSelectionsArgs);
+
     }
 
-    public String modifyContent(Context context, String updateValue, Uri contentUri, String id) {
+    public final int modifyContent(Context context, String updateValue, Uri contentUri) {
 
-        String mSelection = MediaStore.Video.Media._ID + "=?";
-        String[] mSelectionsArgs = new String[] {id};
-        ContentValues Value = new ContentValues();
-        Value.put(MediaStore.Video.Media.TITLE, updateValue);
+        final ContentValues value = new ContentValues();
+        value.put(MediaStore.Video.Media.DISPLAY_NAME, updateValue);
 
         ContentResolver contentResolver = context.getContentResolver();
-        contentResolver.update(contentUri, Value, mSelection, mSelectionsArgs);
+        int res = contentResolver.update(contentUri, value, null, null);
+        return res;
         //TODO: 값은 잘 전달되고 로직 문제있음. Rename 사용해볼것. 또는 https://stackoverflow.com/questions/55314476/how-to-rename-a-file-in-android-knowing-only-its-media-content-uri 참고(DocumentContract)
-        return Value.toString();
     }
 
 }

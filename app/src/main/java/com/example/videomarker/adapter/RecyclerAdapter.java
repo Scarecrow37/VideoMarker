@@ -68,6 +68,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    id = String.valueOf(datas.get(position).getResId());
                     Intent intent = new Intent(context, PlayerActivity.class);
                     intent.putExtra("ID", id);
                     context.startActivity(intent);
@@ -100,7 +101,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         id = String.valueOf(datas.get(position).getResId());
         contentUri = Uri.withAppendedPath(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, id.toString());
-        name = datas.get(position).getName();
         PopupMenu p = new PopupMenu(context, v);
         MenuInflater inflater = p.getMenuInflater();
         Menu menu = p.getMenu();
@@ -125,13 +125,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     case R.id.pDel:
                         androidx.appcompat.app.AlertDialog.Builder builder = new AlertDialog.Builder(context);
                         builder.setTitle("삭제");
-                        builder.setMessage(name + "파일을 삭제하시겠습니까?");
+                        builder.setMessage("파일을 삭제하시겠습니까?");
                         builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 ContentLoader cl = new ContentLoader();
                                 cl.deleteContent(context, contentUri, id);
-                                cl.getContent(context);
                                 dialogInterface.dismiss();
                             }
                         });

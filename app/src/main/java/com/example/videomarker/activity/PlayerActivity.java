@@ -40,8 +40,8 @@ public class PlayerActivity extends AppCompatActivity {
 
         exoPlayerView = findViewById(R.id.video_view);
 
-        Intent intent1 = getIntent();
-        id = intent1.getExtras().getString("ID");
+        Intent intent = getIntent();
+        id = intent.getExtras().getString("ID");
         contentUri = Uri.withAppendedPath(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, id);
     }
 
