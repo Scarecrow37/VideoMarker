@@ -36,7 +36,6 @@ public class FileUtil {
                     //TODO getExternalStorageDirectory : deprecated (api29), 대체찾기
                 }
 
-                // TODO handle non-primary volumes
             }
             // DownloadsProvider
             else if (isDownloadsDocument(uri)) {

@@ -1,11 +1,14 @@
 package com.example.videomarker.data.util;
 
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Parcel;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.widget.EditText;
 
 import androidx.annotation.Nullable;
 
@@ -35,7 +38,7 @@ public class ContentLoader {
         Uri uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
         String projections[] = {
                 MediaStore.Video.Media._ID,
-                MediaStore.Video.Media.TITLE,
+                MediaStore.Video.Media.DISPLAY_NAME,
                 MediaStore.Video.Media.DURATION,
                 MediaStore.Video.Media.SIZE,
                 MediaStore.Video.Media.MIME_TYPE,
@@ -86,7 +89,6 @@ public class ContentLoader {
         return datas;
     }
 
-
     public String getReadableDuration(long millis) {
         //TODO: 60분 미만이어도 00:00:00 로 표시되는 현상
         String dur = String.format("%02d:%02d:%02d",
@@ -98,35 +100,6 @@ public class ContentLoader {
         return dur;
     }
 
-
-
-//    public static List<Data> getData(Context context) {
-//        List<Data> datas = new ArrayList<>();
-//
-//        Data data = new Data();
-//
-//        data.setName(name);
-//        data.setDur(dur);
-//
-//        datas.add(data);
-//        return datas;
-//    }
-
-    //    public static List<Data> getInfoData(Context context) {
-//        List<Data> datas = new ArrayList<>();
-//
-//        Data data = new Data();
-//
-//        data.setResId(id);
-//        data.setName(name);
-//        data.setDur(dur);
-//        data.setSize(size);
-//        data.setMime(mime);
-//        data.setAdded(added);
-//
-//        datas.add(data);
-//        return datas;
-//    }
     public String getReadableFileSize(int size) {
         final int BYTES_IN_KILOBYTES = 1024;
         final DecimalFormat dec = new DecimalFormat("###.#");
@@ -151,12 +124,25 @@ public class ContentLoader {
         return String.valueOf(dec.format(fileSize) + suffix);
     }
 
-    public static void deleteContent(Context context, Uri contentUri, String id) {
+    //TODO: 이 메소드는 android api 29 부터 permission을 요구함 https://codechacha.com/ko/android-mediastore-remove-media-files/ 참고
+    public void deleteContent(Context context, Uri contentUri, String id) {
         String mSelection = MediaStore.Video.Media._ID + "=?";
         String[] mSelectionsArgs = new String[] {id};
 
         ContentResolver contentResolver = context.getContentResolver();
         contentResolver.delete(contentUri, mSelection, mSelectionsArgs);
+
+    }
+
+    public final int modifyContent(Context context, String updateValue, Uri contentUri) {
+
+        final ContentValues value = new ContentValues();
+        value.put(MediaStore.Video.Media.DISPLAY_NAME, updateValue);
+
+        ContentResolver contentResolver = context.getContentResolver();
+        int res = contentResolver.update(contentUri, value, null, null);
+        return res;
+        //TODO: 값은 잘 전달되고 로직 문제있음. Rename 사용해볼것. 또는 https://stackoverflow.com/questions/55314476/how-to-rename-a-file-in-android-knowing-only-its-media-content-uri 참고(DocumentContract)
     }
 
 }

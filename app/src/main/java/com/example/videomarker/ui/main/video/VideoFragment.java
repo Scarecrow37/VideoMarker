@@ -9,8 +9,10 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+//import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.videomarker.R;
 import com.example.videomarker.adapter.RecyclerAdapter;
@@ -33,8 +35,20 @@ public class VideoFragment extends Fragment {
         RecyclerAdapter adapter = new RecyclerAdapter(datas, context);
         RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
         recyclerView.setAdapter(adapter);
+        recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter.notifyDataSetChanged();
+
+//        final SwipeRefreshLayout swipe_refresh = v.findViewById(R.id.recyclerViewRefresh);
+//        swipe_refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+//                adapter.notifyDataSetChanged();
+//
+//                swipe_refresh.setRefreshing(false);
+//            }
+//        });
+
         return v;
     }
 }
